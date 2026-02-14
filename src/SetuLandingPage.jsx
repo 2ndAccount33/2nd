@@ -1,19 +1,21 @@
 import { useState } from 'react';
 import {
     Mail, Calendar, FileText, HardDrive, MessageSquare,
-    Github, ArrowRight, Play, Zap, Check, ChevronRight,
+    Github, Zap, Check, ChevronRight,
     Globe, Shield, Clock, Sparkles, Bot, Workflow,
     ExternalLink, Star, Menu, X
 } from 'lucide-react';
 
 /* ───────────────────── LOGO ───────────────────── */
-const SetuLogo = () => (
-    <div className="flex flex-col items-center">
-        <div className="flex items-baseline gap-2">
-            <span className="text-3xl md:text-4xl font-black tracking-wider text-white">SETU</span>
-            <span className="text-2xl md:text-3xl font-bold text-accent" style={{ fontFamily: 'serif' }}>सेतु</span>
+const SetuLogo = ({ size = 'lg' }) => (
+    <div className="flex flex-col">
+        <div className="flex items-center">
+            <div className={`bg-dark-600 border border-white/10 rounded-lg flex items-center gap-1.5 ${size === 'lg' ? 'px-3 py-1.5' : 'px-2 py-1'}`}>
+                <span className={`${size === 'lg' ? 'text-xl' : 'text-base'} font-black tracking-wider text-white`}>SETU</span>
+                <span className={`${size === 'lg' ? 'text-lg' : 'text-sm'} font-bold text-accent`} style={{ fontFamily: 'serif' }}>सेतु</span>
+            </div>
         </div>
-        <span className="text-[11px] tracking-[0.25em] text-white/40 uppercase mt-0.5">Bridge your digital world</span>
+        <span className="text-[10px] tracking-[0.15em] text-white/35 mt-1.5 italic">Bridge of your digital world</span>
     </div>
 );
 
@@ -61,9 +63,6 @@ const WorkflowNode = ({ label, icon: Icon, x, y, active, accent }) => (
 /* ════════════════════════════════════════════════ */
 export default function SetuLandingPage() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [taskInput, setTaskInput] = useState(
-        'When a GitHub issue is created → Automatically post it to #dev Slack with priority label'
-    );
 
     return (
         <div className="min-h-screen bg-dark-900 text-white font-sans relative overflow-x-hidden">
@@ -74,14 +73,11 @@ export default function SetuLandingPage() {
 
             {/* ══════════════════ NAVBAR ══════════════════ */}
             <nav className="relative z-50 flex items-center justify-between px-6 md:px-12 lg:px-20 py-5">
-                <div className="flex items-center gap-2">
-                    <span className="text-xl font-extrabold tracking-wide">SETU</span>
-                    <span className="text-lg font-bold text-accent" style={{ fontFamily: 'serif' }}>सेतु</span>
-                </div>
+                <SetuLogo size="sm" />
 
-                {/* Desktop nav */}
+                {/* Desktop center nav */}
                 <div className="hidden md:flex items-center gap-8">
-                    {['Product', 'Integrations', 'Pricing', 'Docs'].map((item) => (
+                    {['About', 'Product', 'Prices'].map((item) => (
                         <a
                             key={item}
                             href="#"
@@ -92,9 +88,12 @@ export default function SetuLandingPage() {
                     ))}
                 </div>
 
-                <div className="hidden md:flex items-center gap-4">
-                    <a href="#" className="text-sm text-white/60 hover:text-white transition-colors">Log in</a>
-                    <button className="bg-accent hover:bg-accent-light text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-accent/25">
+                {/* Desktop right buttons */}
+                <div className="hidden md:flex items-center gap-3">
+                    <button className="border border-white/20 hover:border-white/40 text-white/70 hover:text-white text-sm font-medium px-5 py-2 rounded-lg transition-all duration-200">
+                        How it works
+                    </button>
+                    <button className="bg-accent hover:bg-accent-light text-white text-sm font-semibold px-5 py-2 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-accent/25">
                         Get Started
                     </button>
                 </div>
@@ -112,7 +111,7 @@ export default function SetuLandingPage() {
             {mobileMenuOpen && (
                 <div className="md:hidden fixed inset-0 z-40 bg-dark-900/95 backdrop-blur-lg pt-20 px-6">
                     <div className="flex flex-col gap-6">
-                        {['Product', 'Integrations', 'Pricing', 'Docs', 'Log in'].map((item) => (
+                        {['About', 'Product', 'Prices', 'How it works'].map((item) => (
                             <a key={item} href="#" className="text-lg text-white/70 hover:text-white transition-colors">
                                 {item}
                             </a>
@@ -124,50 +123,100 @@ export default function SetuLandingPage() {
                 </div>
             )}
 
-            {/* ══════════════════ HERO ══════════════════ */}
-            <section className="relative z-10 flex flex-col items-center text-center px-6 pt-10 md:pt-16 pb-10">
-                <SetuLogo />
+            {/* ══════════════════ HERO (Centered) ══════════════════ */}
+            <section className="relative z-10 px-6 md:px-12 lg:px-20 pt-12 md:pt-20 pb-16 md:pb-24">
+                <div className="max-w-4xl mx-auto text-center">
 
-                <h1 className="mt-8 md:mt-10 text-3xl sm:text-4xl md:text-5xl lg:text-[3.4rem] font-extrabold leading-tight max-w-3xl">
-                    Describe any task in plain English. Our{' '}
-                    <span className="text-accent">AI agents</span> bridge Gmail, Calendar, and
-                    Notion—<span className="italic">automatically</span>.
-                </h1>
+                    {/* Headline */}
+                    <h1 className="text-4xl sm:text-5xl md:text-[3.5rem] lg:text-[4rem] font-extrabold leading-[1.1] tracking-tight">
+                        Describe any task in{' '}
+                        <span className="italic font-serif text-[#C9A96E]">plain English</span>.
+                        <br className="hidden sm:block" />
+                        Our AI agents bridge Gmail, Calendar,
+                        <br className="hidden sm:block" />
+                        and Notion, etc —automatically.
+                    </h1>
 
-                <div className="flex flex-wrap justify-center gap-4 mt-8">
-                    <button className="bg-accent hover:bg-accent-light text-white font-semibold px-7 py-3 rounded-lg transition-all duration-200 flex items-center gap-2 hover:shadow-xl hover:shadow-accent/25 hover:-translate-y-0.5">
-                        Get Started
-                        <ArrowRight size={16} />
-                    </button>
-                    <button className="border border-white/20 hover:border-white/40 text-white/80 hover:text-white font-semibold px-7 py-3 rounded-lg transition-all duration-200 flex items-center gap-2 hover:-translate-y-0.5">
-                        <Play size={16} />
-                        Watch Demo
-                    </button>
-                </div>
-            </section>
+                    {/* Subtitle */}
+                    <p className="mt-6 text-white/45 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
+                        Setu is a no-code AI agent platform that helps you automate your daily tasks.
+                    </p>
 
-            {/* ══════════════════ TASK INPUT BAR ══════════════════ */}
-            <section className="relative z-10 max-w-3xl mx-auto px-6 pb-6">
-                <div className="glass-card-strong p-2 flex items-center gap-2">
-                    <div className="flex-1 flex items-center bg-dark-700/60 rounded-xl px-4 py-3">
-                        <span className="text-sm text-white/60 flex-1 truncate">{taskInput}</span>
+                    {/* CTA Buttons */}
+                    <div className="flex flex-wrap justify-center gap-4 mt-8">
+                        <button className="bg-accent hover:bg-accent-light text-white font-semibold px-7 py-3 rounded-full transition-all duration-200 flex items-center gap-2 hover:shadow-xl hover:shadow-accent/25 hover:-translate-y-0.5 text-sm">
+                            Get Started
+                            <span className="ml-1">→</span>
+                        </button>
+                        <button className="border border-white/20 hover:border-white/40 text-white/80 hover:text-white font-semibold px-7 py-3 rounded-full transition-all duration-200 flex items-center gap-2 hover:-translate-y-0.5 text-sm">
+                            Watch Demo
+                        </button>
                     </div>
-                    <button className="bg-accent hover:bg-accent-light text-white text-sm font-bold px-6 py-3 rounded-xl transition-all duration-200 flex-shrink-0 hover:shadow-lg hover:shadow-accent/25">
-                        Create
-                    </button>
-                </div>
-                <div className="flex items-center gap-3 mt-3 px-2">
-                    <span className="text-xs text-green-400/80 flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-subtle-pulse" />
-                        15 integrations
-                    </span>
-                    <span className="text-xs text-white/30">•</span>
-                    <span className="text-xs text-white/40">What something happens…</span>
+
+                    {/* Task Automation Card */}
+                    <div className="mt-12 max-w-lg mx-auto">
+                        <div className="w-full bg-dark-700/80 border border-white/[0.08] rounded-2xl shadow-2xl shadow-black/40 overflow-hidden text-left">
+                            {/* Trigger row */}
+                            <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-white/40 text-sm font-medium">When</span>
+                                    <span className="text-white/70 text-sm">a new lead signs up</span>
+                                </div>
+                                <button className="text-white/20 hover:text-white/40 transition-colors">
+                                    <ExternalLink size={14} />
+                                </button>
+                            </div>
+
+                            {/* Action row */}
+                            <div className="px-5 py-4 border-b border-white/[0.06]">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-accent font-semibold text-sm">Automatically</span>
+                                    <span className="text-accent/50">→</span>
+                                    <span className="text-white/60 text-sm">research their company and notify me on Slack</span>
+                                    <button className="ml-auto text-white/20 hover:text-white/40 transition-colors flex-shrink-0">
+                                        <ExternalLink size={14} />
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Bottom toolbar */}
+                            <div className="flex items-center justify-between px-5 py-3 bg-dark-800/50">
+                                <div className="flex items-center gap-3">
+                                    {/* Integration dots */}
+                                    <div className="flex items-center gap-1">
+                                        <div className="w-4 h-4 rounded-full bg-yellow-500/80" />
+                                        <div className="w-4 h-4 rounded-full bg-blue-500/80" />
+                                        <div className="w-4 h-4 rounded-full bg-green-500/80" />
+                                    </div>
+                                    <span className="text-xs text-white/50 font-medium">Integrations</span>
+
+                                    {/* Divider */}
+                                    <div className="w-px h-4 bg-white/10" />
+
+                                    {/* When something happens */}
+                                    <button className="flex items-center gap-1 text-xs text-white/50 hover:text-white/70 transition-colors">
+                                        <Sparkles size={12} className="text-white/40" />
+                                        When something happens
+                                        <ChevronRight size={12} className="rotate-90" />
+                                    </button>
+                                </div>
+
+                                {/* Create button */}
+                                <button className="bg-accent hover:bg-accent-light text-white text-xs font-bold px-4 py-1.5 rounded-lg transition-all duration-200 flex items-center gap-1 hover:shadow-lg hover:shadow-accent/25">
+                                    <Zap size={11} />
+                                    Create
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
             {/* ══════════════════ NOT SURE SECTION ══════════════════ */}
-            <section className="relative z-10 text-center px-6 py-12 md:py-16">
+            <div className="max-w-6xl mx-auto px-6 pt-16 md:pt-28">
+                <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+            </div>
+            <section className="relative z-10 text-center px-6 py-16 md:py-24">
                 <p className="text-xs tracking-[0.2em] uppercase text-white/30 mb-3">Not sure where to start?</p>
                 <h2 className="text-2xl md:text-3xl font-bold text-white">
                     Not sure where to start?...
