@@ -1,12 +1,90 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     Mail, Calendar, FileText, HardDrive, MessageSquare,
     Github, Zap, Check, ChevronRight,
     Globe, Shield, Clock, Sparkles, Bot, Workflow,
-    ExternalLink, Star, Menu, X
+    ExternalLink, Star, Menu, X, Search, Code, Database,
+    ShoppingBag, Image, Layers, PenTool, LayoutTemplate, Briefcase
 } from 'lucide-react';
 
-/* ───────────────────── LOGO ───────────────────── */
+const GMAIL_LOGO = 'https://www.gstatic.com/marketing-cms/assets/images/66/ac/14b165e647fd85c824bfbe5d6bc5/gmail.webp=s96-fcrop64=1,00000000ffffffff-rw';
+const GDRIVE_LOGO = 'https://logos.composio.dev/api/googledrive';
+const SLACK_LOGO = 'https://logos.composio.dev/api/slack';
+const GSHEETS_LOGO = 'https://logos.composio.dev/api/googlesheets';
+const NOTION_LOGO = 'https://logos.composio.dev/api/notion';
+const GITHUB_LOGO = 'https://cdn.simpleicons.org/github/white';
+const GMEET_LOGO = 'https://logos.composio.dev/api/googlemeet';
+const GCALENDAR_LOGO = 'https://logos.composio.dev/api/googlecalendar';
+const EXCEL_LOGO = 'https://cdn.jsdelivr.net/gh/ComposioHQ/open-logos@master/Excel.png';
+const GDOCS_LOGO = 'https://logos.composio.dev/api/googledocs';
+const DISCORD_LOGO = 'https://logos.composio.dev/api/discord';
+const TELEGRAM_LOGO = 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/240px-Telegram_logo.svg.png';
+
+/* ───────────────────── DATA FOR DYNAMIC UI ───────────────────── */
+const examples = [
+    { trigger: "a new row is added to my leads sheet", action: "research the company and add notes" },
+    { trigger: "a GitHub issue is created", action: "post it to #dev Slack with priority label" },
+    { trigger: "someone mentions us on X", action: "add it to our social tracker" },
+    { trigger: "a support ticket arrives", action: "draft a reply using our FAQ" }
+];
+
+const tabs = ['Productivity', 'Communication', 'Development', 'Business', 'AI & More'];
+
+const appsData = {
+    'Popular Apps': [
+        { name: 'Gmail', image: GMAIL_LOGO, color: '#EA4335', features: 13 },
+        { name: 'Google Drive', image: GDRIVE_LOGO, color: '#0F9D58', features: 21 },
+        { name: 'Slack', image: SLACK_LOGO, color: '#E01E5A', features: 20 },
+        { name: 'Google Sheets', image: GSHEETS_LOGO, color: '#0F9D58', features: 23 },
+        { name: 'Notion', image: NOTION_LOGO, color: '#FFFFFF', features: 28 },
+        { name: 'GitHub', image: GITHUB_LOGO, color: '#FFFFFF', features: 17 },
+        { name: 'Asana', icon: Check, color: '#F06A6A', features: 37 },
+        { name: 'Salesforce', icon: Globe, color: '#00A1E0', features: 24 }
+    ],
+    'Productivity': [
+        { name: 'Dropbox', icon: HardDrive, features: 11, beta: true },
+        { name: 'Todoist', icon: Check, features: 14, beta: true },
+        { name: 'Gmail', image: GMAIL_LOGO, features: 13, color: '#EA4335' },
+        { name: 'Google Tasks', icon: Check, features: 14, beta: true, color: '#4285F4' },
+        { name: 'OneDrive', icon: HardDrive, features: 13, beta: true, color: '#0078D4' },
+        { name: 'Notion', image: NOTION_LOGO, features: 28 },
+        { name: 'Outlook', icon: Mail, features: 20, beta: true, color: '#0078D4' },
+        { name: 'Google Docs', image: GDOCS_LOGO, features: 26, beta: true, color: '#4285F4' },
+        { name: 'api2pdf', icon: FileText, features: 5, beta: true },
+        { name: 'Google Meet', image: GMEET_LOGO, features: 18, beta: true, color: '#00897B' },
+        { name: 'Google Sheets', image: GSHEETS_LOGO, features: 23, beta: true, color: '#0F9D58' },
+        { name: 'Google Calendar', image: GCALENDAR_LOGO, features: 31, beta: true, color: '#4285F4' },
+    ],
+    'Communication': [
+        { name: 'Slack', image: SLACK_LOGO, features: 20, color: '#E01E5A' },
+        { name: 'Discord', image: DISCORD_LOGO, features: 6, beta: true, color: '#5865F2' },
+        { name: 'Twitter', icon: Globe, features: 28, beta: true, color: '#1DA1F2' },
+        { name: 'Microsoft Teams', icon: MessageSquare, features: 20, beta: true, color: '#6264A7' },
+        { name: 'WhatsApp', icon: MessageSquare, features: 15, beta: true, color: '#25D366' },
+        { name: 'Intercom', icon: MessageSquare, features: 14, beta: true, color: '#1F8EEA' }
+    ],
+    'Development': [
+        { name: 'AgentQL', icon: Code, features: 3, beta: true },
+        { name: 'GitHub', image: GITHUB_LOGO, features: 17, beta: true },
+        { name: 'Supabase', icon: Database, features: 31, beta: true, color: '#3ECF8E' },
+        { name: 'GitLab', icon: Github, features: 28, beta: true, color: '#FC6D26' }
+    ],
+    'Business': [
+        { name: 'Benchmark Email', icon: Mail, features: 13, beta: true },
+        { name: 'Todoist', icon: Check, features: 14, beta: true },
+        { name: 'Shopify', icon: ShoppingBag, features: 15, beta: true, color: '#96BF48' },
+        { name: 'Google Tasks', icon: Check, features: 14, beta: true, color: '#4285F4' },
+    ],
+    'AI & More': [
+        { name: 'Exa', icon: Zap, features: 12, beta: true },
+        { name: 'Voo', icon: Zap, features: 5, beta: true },
+        { name: 'Perplexity', icon: Search, features: 1, beta: true },
+        { name: 'AtTest AI', icon: Check, features: 4, beta: true },
+        { name: 'Canva', icon: Image, features: 28, beta: true, color: '#00C4CC' },
+    ]
+};
+
+/* ───────────────────── COMPONENTS ───────────────────── */
 const SetuLogo = ({ size = 'lg' }) => (
     <div className="flex flex-col">
         <div className="flex items-center">
@@ -19,32 +97,33 @@ const SetuLogo = ({ size = 'lg' }) => (
     </div>
 );
 
-/* ───────────────── INTEGRATION ICONS ──────────── */
-const integrationsList = [
-    { name: 'Gmail', icon: Mail, color: '#EA4335' },
-    { name: 'Google Calendar', icon: Calendar, color: '#4285F4' },
-    { name: 'Notion', icon: FileText, color: '#FFFFFF' },
-    { name: 'Google Drive', icon: HardDrive, color: '#0F9D58' },
-    { name: 'GitHub', icon: Github, color: '#FFFFFF' },
-    { name: 'Slack', icon: MessageSquare, color: '#E01E5A' },
-];
+const AppCard = ({ app }) => {
+    const Icon = app.icon;
+    return (
+        <div className="bg-[#1C1C1C] border border-white/5 hover:border-white/20 hover:bg-[#222222] rounded-xl p-4 flex items-center justify-between cursor-pointer transition-all group">
+            <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/5 border border-white/10 group-hover:bg-white/10 transition-colors">
+                    {app.image ? (
+                        <img src={app.image} alt={app.name} className="w-5 h-5 object-contain" />
+                    ) : (
+                        <Icon size={20} style={{ color: app.color || '#FFFFFF' }} />
+                    )}
+                </div>
+                <div className="flex flex-col">
+                    <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-white/90 group-hover:text-white transition-colors">{app.name}</span>
+                        {app.beta && (
+                            <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-[#332211] text-[#FF8B5E] border border-[#FF6B35]/30">beta</span>
+                        )}
+                    </div>
+                    <span className="text-xs text-white/40 group-hover:text-white/50 transition-colors">{app.features} features</span>
+                </div>
+            </div>
+            <ChevronRight size={16} className="text-white/10 group-hover:text-white/30 transition-colors" />
+        </div>
+    )
+};
 
-const toolsGrid = [
-    { name: 'Gmail', icon: Mail, color: '#EA4335', bg: 'bg-red-500/10' },
-    { name: 'Calendar', icon: Calendar, color: '#4285F4', bg: 'bg-blue-500/10' },
-    { name: 'Notion', icon: FileText, color: '#FFFFFF', bg: 'bg-white/5' },
-    { name: 'Drive', icon: HardDrive, color: '#0F9D58', bg: 'bg-green-500/10' },
-    { name: 'Slack', icon: MessageSquare, color: '#E01E5A', bg: 'bg-pink-500/10' },
-    { name: 'GitHub', icon: Github, color: '#FFFFFF', bg: 'bg-white/5' },
-    { name: 'Sheets', icon: FileText, color: '#0F9D58', bg: 'bg-green-500/10' },
-    { name: 'Discord', icon: MessageSquare, color: '#5865F2', bg: 'bg-indigo-500/10' },
-    { name: 'Trello', icon: Globe, color: '#0079BF', bg: 'bg-blue-500/10' },
-    { name: 'Jira', icon: Zap, color: '#0052CC', bg: 'bg-blue-600/10' },
-    { name: 'Linear', icon: Workflow, color: '#5E6AD2', bg: 'bg-indigo-500/10' },
-    { name: 'More', icon: Sparkles, color: '#FF6B35', bg: 'bg-accent/10' },
-];
-
-/* ───────────────── WORKFLOW NODE ──────────────── */
 const WorkflowNode = ({ label, icon: Icon, x, y, active, accent }) => (
     <div
         className={`absolute flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-500
@@ -58,11 +137,48 @@ const WorkflowNode = ({ label, icon: Icon, x, y, active, accent }) => (
     </div>
 );
 
+const integrationsList = [
+    { name: 'Gmail', image: GMAIL_LOGO, color: '#EA4335' },
+    { name: 'Google Calendar', image: GCALENDAR_LOGO, color: '#4285F4' },
+    { name: 'Notion', image: NOTION_LOGO, color: '#FFFFFF' },
+    { name: 'Google Drive', image: GDRIVE_LOGO, color: '#0F9D58' },
+    { name: 'GitHub', image: GITHUB_LOGO, color: '#FFFFFF' },
+    { name: 'Slack', image: SLACK_LOGO, color: '#E01E5A' },
+];
+
+const toolsGrid = [
+    { name: 'Gmail', image: GMAIL_LOGO, color: '#EA4335', bg: 'bg-red-500/10' },
+    { name: 'Calendar', image: GCALENDAR_LOGO, color: '#4285F4', bg: 'bg-blue-500/10' },
+    { name: 'Notion', image: NOTION_LOGO, color: '#FFFFFF', bg: 'bg-white/5' },
+    { name: 'Drive', image: GDRIVE_LOGO, color: '#0F9D58', bg: 'bg-green-500/10' },
+    { name: 'Slack', image: SLACK_LOGO, color: '#E01E5A', bg: 'bg-pink-500/10' },
+    { name: 'GitHub', image: GITHUB_LOGO, color: '#FFFFFF', bg: 'bg-white/5' },
+    { name: 'Sheets', image: GSHEETS_LOGO, color: '#0F9D58', bg: 'bg-green-500/10' },
+    { name: 'Discord', image: DISCORD_LOGO, color: '#5865F2', bg: 'bg-indigo-500/10' },
+    { name: 'Telegram', image: TELEGRAM_LOGO, color: '#0079BF', bg: 'bg-blue-500/10' },
+    { name: 'Docs', image: GDOCS_LOGO, color: '#0052CC', bg: 'bg-blue-600/10' },
+    { name: 'Excel', image: EXCEL_LOGO, color: '#5E6AD2', bg: 'bg-indigo-500/10' },
+    { name: 'More', icon: Sparkles, color: '#FF6B35', bg: 'bg-accent/10' },
+];
+
 /* ════════════════════════════════════════════════ */
-/*               MAIN COMPONENT                    */
+/* MAIN COMPONENT                    */
 /* ════════════════════════════════════════════════ */
 export default function SetuLandingPage() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+    // State for the dynamic UI
+    const [isAppsModalOpen, setIsAppsModalOpen] = useState(false);
+    const [activeTab, setActiveTab] = useState('Productivity');
+    const [currentExampleIndex, setCurrentExampleIndex] = useState(0);
+
+    // Cycle through text examples
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentExampleIndex((prev) => (prev + 1) % examples.length);
+        }, 4000); // changes every 4 seconds
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <div className="min-h-screen bg-dark-900 text-white font-sans relative overflow-x-hidden">
@@ -124,89 +240,116 @@ export default function SetuLandingPage() {
             )}
 
             {/* ══════════════════ HERO (Centered) ══════════════════ */}
-            <section className="relative z-10 px-6 md:px-12 lg:px-20 pt-12 md:pt-20 pb-16 md:pb-24">
+            <section className="relative z-10 px-6 md:px-12 lg:px-20 pt-8 md:pt-10 pb-16 md:pb-24">
                 <div className="max-w-4xl mx-auto text-center">
-
                     {/* Headline */}
-                    <h1 className="text-4xl sm:text-5xl md:text-[3.5rem] lg:text-[4rem] font-extrabold leading-[1.1] tracking-tight">
-                        Describe any task in{' '}
-                        <span className="italic font-serif text-[#C9A96E]">plain English</span>.
-                        <br className="hidden sm:block" />
+                    <h1 className="font-serif text-3xl sm:text-4xl md:text-[2.75rem] font-bold text-white leading-[1.2] md:leading-[1.15] tracking-[-0.02em]">
+                        Describe any task in
+                        <br className="hidden md:block" />
+                        <span className="relative inline-block whitespace-nowrap mt-1 md:mt-0">
+                            <span className="italic text-[#C9A96E]">plain English</span>
+                            {/* Hand-drawn curved underline */}
+                            <svg
+                                className="absolute left-0 w-full h-[8px] md:h-[10px] -bottom-1 md:-bottom-1.5 text-[#C9A96E] opacity-90"
+                                viewBox="0 0 200 12"
+                                fill="none"
+                                preserveAspectRatio="none"
+                            >
+                                <path
+                                    d="M3 9C50 3 150 3 197 9"
+                                    stroke="currentColor"
+                                    strokeWidth="3.5"
+                                    strokeLinecap="round"
+                                    vectorEffect="non-scaling-stroke"
+                                />
+                            </svg>
+                        </span>
+                        .
+                        <br className="hidden md:block" />
                         Our AI agents bridge Gmail, Calendar,
-                        <br className="hidden sm:block" />
-                        and Notion, etc —automatically.
+                        <br className="hidden md:block" />
+                        and Notion, etc — automatically.
                     </h1>
 
                     {/* Subtitle */}
-                    <p className="mt-6 text-white/45 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
+                    <p className="mt-4 text-white/45 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
                         Setu is a no-code AI agent platform that helps you automate your daily tasks.
                     </p>
 
-                    {/* CTA Buttons */}
-                    <div className="flex flex-wrap justify-center gap-4 mt-8">
-                        <button className="bg-accent hover:bg-accent-light text-white font-semibold px-7 py-3 rounded-full transition-all duration-200 flex items-center gap-2 hover:shadow-xl hover:shadow-accent/25 hover:-translate-y-0.5 text-sm">
-                            Get Started
-                            <span className="ml-1">→</span>
-                        </button>
-                        <button className="border border-white/20 hover:border-white/40 text-white/80 hover:text-white font-semibold px-7 py-3 rounded-full transition-all duration-200 flex items-center gap-2 hover:-translate-y-0.5 text-sm">
-                            Watch Demo
-                        </button>
-                    </div>
+                    {/* Dynamic Task Automation Card */}
+                    <div className="mt-8 max-w-3xl mx-auto">
+                        <div className="w-full bg-[#141414] border border-white/10 rounded-2xl shadow-2xl overflow-hidden text-left p-3">
+                            <div className="bg-[#1A1A1A] rounded-xl border border-white/5 p-4 flex flex-col gap-4">
 
-                    {/* Task Automation Card */}
-                    <div className="mt-12 max-w-lg mx-auto">
-                        <div className="w-full bg-dark-700/80 border border-white/[0.08] rounded-2xl shadow-2xl shadow-black/40 overflow-hidden text-left">
-                            {/* Trigger row */}
-                            <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-white/40 text-sm font-medium">When</span>
-                                    <span className="text-white/70 text-sm">a new lead signs up</span>
-                                </div>
-                                <button className="text-white/20 hover:text-white/40 transition-colors">
-                                    <ExternalLink size={14} />
-                                </button>
-                            </div>
-
-                            {/* Action row */}
-                            <div className="px-5 py-4 border-b border-white/[0.06]">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-accent font-semibold text-sm">Automatically</span>
-                                    <span className="text-accent/50">→</span>
-                                    <span className="text-white/60 text-sm">research their company and notify me on Slack</span>
-                                    <button className="ml-auto text-white/20 hover:text-white/40 transition-colors flex-shrink-0">
-                                        <ExternalLink size={14} />
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Bottom toolbar */}
-                            <div className="flex items-center justify-between px-5 py-3 bg-dark-800/50">
-                                <div className="flex items-center gap-3">
-                                    {/* Integration dots */}
-                                    <div className="flex items-center gap-1">
-                                        <div className="w-4 h-4 rounded-full bg-yellow-500/80" />
-                                        <div className="w-4 h-4 rounded-full bg-blue-500/80" />
-                                        <div className="w-4 h-4 rounded-full bg-green-500/80" />
+                                {/* When Input Line */}
+                                <div className="flex items-center gap-3 bg-[#222222] border border-white/10 rounded-lg px-4 py-3 group focus-within:border-white/30 transition-colors">
+                                    <span className="text-white/60 font-medium whitespace-nowrap">When</span>
+                                    <div className="w-full relative h-6 overflow-hidden flex items-center">
+                                        {/* Note: In a production app you'd use framer-motion or CSS transitions. Here we rely on simple state change to mimic the video. */}
+                                        <span key={`trigger-${currentExampleIndex}`} className="text-white/90 w-full truncate animate-[fade-in_0.5s_ease-in-out]">
+                                            {examples[currentExampleIndex].trigger}
+                                        </span>
                                     </div>
-                                    <span className="text-xs text-white/50 font-medium">Integrations</span>
+                                    <PenTool size={16} className="text-white/20 flex-shrink-0 group-hover:text-white/40 cursor-pointer" />
+                                </div>
 
-                                    {/* Divider */}
-                                    <div className="w-px h-4 bg-white/10" />
+                                {/* Automatically Input Line */}
+                                <div className="flex items-center gap-3 bg-[#222222] border border-white/10 rounded-lg px-4 py-3 group focus-within:border-white/30 transition-colors">
+                                    <span className="text-accent font-medium whitespace-nowrap">Automatically <span className="text-accent/60 ml-1">→</span></span>
+                                    <div className="w-full relative h-6 overflow-hidden flex items-center">
+                                        <span key={`action-${currentExampleIndex}`} className="text-white/90 w-full truncate animate-[fade-in_0.5s_ease-in-out]">
+                                            {examples[currentExampleIndex].action}
+                                        </span>
+                                    </div>
+                                    <PenTool size={16} className="text-white/20 flex-shrink-0 group-hover:text-white/40 cursor-pointer" />
+                                </div>
+                            </div>
 
-                                    {/* When something happens */}
-                                    <button className="flex items-center gap-1 text-xs text-white/50 hover:text-white/70 transition-colors">
-                                        <Sparkles size={12} className="text-white/40" />
+                            {/* Bottom Toolbar */}
+                            <div className="flex flex-wrap items-center justify-between px-2 py-3 mt-1 gap-4">
+                                <div className="flex items-center gap-4">
+                                    {/* Integrations button that opens Modal */}
+                                    <button
+                                        onClick={() => setIsAppsModalOpen(true)}
+                                        className="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full px-3 py-1.5 transition-colors group relative"
+                                    >
+                                        <div className="flex -space-x-1">
+                                            <div className="w-5 h-5 rounded-full bg-white flex items-center justify-center border-2 border-[#141414] z-30"><Github size={12} color="black" /></div>
+                                            <div className="w-5 h-5 rounded-full bg-[#4285F4] flex items-center justify-center border-2 border-[#141414] z-20"><Calendar size={12} color="white" /></div>
+                                            <div className="w-5 h-5 rounded-full bg-[#0F9D58] flex items-center justify-center border-2 border-[#141414] z-10"><HardDrive size={12} color="white" /></div>
+                                        </div>
+                                        <span className="text-sm font-medium text-white/90">Integrations</span>
+
+                                        {/* Simple tooltip on hover */}
+                                        <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-white text-black text-xs font-semibold py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+                                            Browse available apps
+                                        </span>
+                                    </button>
+
+                                    <button className="flex items-center gap-1.5 text-sm text-white/50 hover:text-white/80 transition-colors">
+                                        <Zap size={14} className="text-white/40" />
                                         When something happens
-                                        <ChevronRight size={12} className="rotate-90" />
+                                        <ChevronRight size={14} className="rotate-90" />
                                     </button>
                                 </div>
 
-                                {/* Create button */}
-                                <button className="bg-accent hover:bg-accent-light text-white text-xs font-bold px-4 py-1.5 rounded-lg transition-all duration-200 flex items-center gap-1 hover:shadow-lg hover:shadow-accent/25">
-                                    <Zap size={11} />
+                                <button className="bg-accent hover:bg-accent-light text-white text-sm font-semibold px-6 py-2 rounded-lg transition-all flex items-center gap-2">
+                                    <Sparkles size={16} />
                                     Create
                                 </button>
                             </div>
+                        </div>
+
+                        {/* Helpful links below card */}
+                        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm text-white/50">
+                            Not sure where to start?
+                            <button className="flex items-center gap-1 text-white hover:text-white/80 underline decoration-white/30 underline-offset-4">
+                                <LayoutTemplate size={14} /> Browse templates
+                            </button>
+                            or
+                            <button className="flex items-center gap-1 text-white hover:text-white/80 underline decoration-white/30 underline-offset-4">
+                                <Search size={14} /> help me find a use-case
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -241,7 +384,11 @@ export default function SetuLandingPage() {
                                 >
                                     <div className="flex items-center gap-3">
                                         <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/[0.06]">
-                                            <item.icon size={16} style={{ color: item.color }} />
+                                            {item.image ? (
+                                                <img src={item.image} alt={item.name} className="w-4 h-4 object-contain" />
+                                            ) : (
+                                                <item.icon size={16} style={{ color: item.color }} />
+                                            )}
                                         </div>
                                         <span className="text-sm text-white/80 font-medium">{item.name}</span>
                                     </div>
@@ -265,11 +412,8 @@ export default function SetuLandingPage() {
                                         <stop offset="100%" stopColor="#FF6B35" stopOpacity="0.15" />
                                     </linearGradient>
                                 </defs>
-                                {/* Line from Trigger to Monitor */}
                                 <line x1="85" y1="45" x2="120" y2="105" stroke="url(#lineGrad)" strokeWidth="1.5" strokeDasharray="4 3" />
-                                {/* Line from Monitor to Task */}
                                 <line x1="170" y1="130" x2="100" y2="190" stroke="url(#lineGrad)" strokeWidth="1.5" strokeDasharray="4 3" />
-                                {/* Line from Task to Notification */}
                                 <line x1="130" y1="215" x2="180" y2="255" stroke="url(#lineGrad)" strokeWidth="1.5" strokeDasharray="4 3" />
                             </svg>
 
@@ -346,7 +490,11 @@ export default function SetuLandingPage() {
                                 className="glass-card hover:bg-white/[0.08] flex flex-col items-center justify-center py-5 px-3 cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/5 group"
                             >
                                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${tool.bg} mb-2 transition-transform group-hover:scale-110`}>
-                                    <tool.icon size={20} style={{ color: tool.color }} />
+                                    {tool.image ? (
+                                        <img src={tool.image} alt={tool.name} className="w-5 h-5 object-contain" />
+                                    ) : (
+                                        <tool.icon size={20} style={{ color: tool.color }} />
+                                    )}
                                 </div>
                                 <span className="text-[11px] text-white/50 group-hover:text-white/70 font-medium transition-colors">{tool.name}</span>
                             </div>
@@ -425,6 +573,94 @@ export default function SetuLandingPage() {
                     </div>
                 </div>
             </footer>
+
+            {/* ══════════════════ APPS MODAL OVERLAY ══════════════════ */}
+            {isAppsModalOpen && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-12">
+                    {/* Dark backdrop */}
+                    <div
+                        className="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity"
+                        onClick={() => setIsAppsModalOpen(false)}
+                    />
+
+                    {/* Modal Content */}
+                    <div className="relative w-full max-w-5xl bg-[#141414] border border-white/10 rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
+
+                        {/* Header */}
+                        <div className="flex items-center justify-between p-4 border-b border-white/5">
+                            <div className="flex-1 max-w-md relative">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" size={18} />
+                                <input
+                                    type="text"
+                                    placeholder="Search apps by name or feature..."
+                                    className="w-full bg-[#1A1A1A] border border-white/10 rounded-lg py-2 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-white/30 focus:bg-[#202020] transition-colors"
+                                />
+                            </div>
+                            <div className="flex items-center gap-4 ml-4">
+                                <span className="text-sm text-white/50 hidden md:inline-block">Your agents can work with any of these apps</span>
+                                <button
+                                    onClick={() => setIsAppsModalOpen(false)}
+                                    className="p-2 hover:bg-white/10 rounded-lg text-white/50 hover:text-white transition-colors"
+                                >
+                                    <X size={20} />
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Tabs Navigation */}
+                        <div className="flex overflow-x-auto border-b border-white/5 px-2">
+                            {tabs.map(tab => (
+                                <button
+                                    key={tab}
+                                    onClick={() => setActiveTab(tab)}
+                                    className={`flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${activeTab === tab
+                                        ? 'border-accent text-white'
+                                        : 'border-transparent text-white/40 hover:text-white/70'
+                                        }`}
+                                >
+                                    {tab === 'Productivity' && <Layers size={16} />}
+                                    {tab === 'Communication' && <MessageSquare size={16} />}
+                                    {tab === 'Development' && <Code size={16} />}
+                                    {tab === 'Business' && <Briefcase size={16} />}
+                                    {tab === 'AI & More' && <Sparkles size={16} />}
+                                    {tab}
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Scrollable Content Area */}
+                        <div className="flex-1 overflow-y-auto p-6 space-y-8">
+
+                            {/* Popular Apps Section (Shown when Productivity tab is active to match the video) */}
+                            {activeTab === 'Productivity' && appsData['Popular Apps'] && (
+                                <div>
+                                    <h3 className="flex items-center gap-2 text-sm font-semibold text-white/90 mb-4">
+                                        <Star size={16} className="text-yellow-500" fill="currentColor" />
+                                        Popular Apps
+                                        <span className="text-xs text-white/40 font-normal ml-2">Most used by agents</span>
+                                    </h3>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                                        {appsData['Popular Apps'].map(app => (
+                                            <AppCard key={`popular-${app.name}`} app={app} />
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Active Category Apps Section */}
+                            <div>
+                                <h3 className="text-sm font-semibold text-white/90 mb-4">{activeTab}</h3>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                                    {appsData[activeTab]?.map(app => (
+                                        <AppCard key={`${activeTab}-${app.name}`} app={app} />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
