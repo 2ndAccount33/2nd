@@ -44,7 +44,7 @@ html {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #CBFF00;
+  background: #B8FF00;
 }
 
 /* Glassmorphic card */
@@ -138,20 +138,20 @@ html {
 
 /* Neon Button */
 .neon-button {
-  background: #CBFF00;
+  background: #B8FF00;
   color: #000000;
   border: none;
   font-weight: 700;
   box-shadow:
-    0 0 15px rgba(203, 255, 0, 0.3),
-    0 4px 10px rgba(203, 255, 0, 0.1);
+    0 0 15px rgba(184, 255, 0, 0.3),
+    0 4px 10px rgba(184, 255, 0, 0.1);
   transition: all 0.3s ease;
 }
 
 .neon-button:hover {
   box-shadow:
-    0 0 30px rgba(203, 255, 0, 0.5),
-    0 6px 20px rgba(203, 255, 0, 0.3);
+    0 0 30px rgba(184, 255, 0, 0.5),
+    0 6px 20px rgba(184, 255, 0, 0.3);
   transform: translateY(-2px);
 }
 
@@ -173,21 +173,21 @@ html {
   position: fixed;
   width: 16px;
   height: 16px;
-  background: rgba(203, 255, 0, 1);
+  background: rgba(184, 255, 0, 1);
   border-radius: 50%;
   pointer-events: none;
   z-index: 10000;
   transform: translate(-50%, -50%);
   box-shadow:
-    0 0 20px rgba(203, 255, 0, 0.8),
-    0 0 40px rgba(203, 255, 0, 0.4);
+    0 0 20px rgba(184, 255, 0, 0.8),
+    0 0 40px rgba(184, 255, 0, 0.4);
   transition: transform 0.15s ease, width 0.2s ease, height 0.2s ease;
 }
 
 .custom-cursor.hover {
   width: 24px;
   height: 24px;
-  background: rgba(203, 255, 0, 0.9);
+  background: rgba(184, 255, 0, 0.9);
 }
 
 .custom-cursor.click {
@@ -205,7 +205,7 @@ html {
 .glass-card:hover {
   transform: translateY(-4px);
   box-shadow:
-    0 0 40px rgba(203, 255, 0, 0.2),
+    0 0 40px rgba(184, 255, 0, 0.2),
     0 8px 32px rgba(0, 0, 0, 0.4);
 }
 

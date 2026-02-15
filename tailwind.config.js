@@ -8,7 +8,7 @@ export default {
     extend: {
       colors: {
         accent: {
-          DEFAULT: '#CBFF00', // neon-green
+          DEFAULT: '#B8FF00', // neon-green
           light: '#DFFF4D',
           dark: '#A6D900',
           blue: '#0EA5E9',    // electric-blue

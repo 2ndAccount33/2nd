@@ -293,7 +293,8 @@ export default function SetuLandingPage() {
 
             {/* ══════════════════ NAVBAR ══════════════════ */}
             {/* ══════════════════ NAVBAR ══════════════════ */}
-            <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 lg:px-20 py-2.5 bg-dark-950/80 backdrop-blur-md border-b border-white/[0.05]">
+            {/* ══════════════════ NAVBAR ══════════════════ */}
+            <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 lg:px-20 py-2 bg-dark-950/80 backdrop-blur-md border-b border-white/[0.05]">
                 <div className="flex items-center gap-3">
                     <SetuLogo size="sm" />
                     <span className="hidden sm:inline-block text-[10px] tracking-widest font-semibold text-white/30 uppercase border border-white/10 px-2 py-0.5 rounded-full">Early Access</span>
@@ -305,13 +306,13 @@ export default function SetuLandingPage() {
                         <a
                             key={item}
                             href="#"
-                            className="px-4 py-1.5 text-xs font-medium text-white/60 hover:text-white hover:bg-white/[0.05] rounded-full transition-all duration-200"
+                            className="px-3 py-1.5 text-xs font-medium text-white/60 hover:text-white hover:bg-white/[0.05] rounded-full transition-all duration-200"
                         >
                             {item}
                         </a>
                     ))}
                     <div className="w-px h-3 bg-white/10 mx-1"></div>
-                    <a href="#" className="flex items-center gap-2 px-4 py-1.5 text-xs font-medium text-white/60 hover:text-white hover:bg-white/[0.05] rounded-full transition-all duration-200">
+                    <a href="#" className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-white/60 hover:text-white hover:bg-white/[0.05] rounded-full transition-all duration-200">
                         <Github size={14} />
                         Community
                     </a>
@@ -323,7 +324,7 @@ export default function SetuLandingPage() {
                         How it works
                         <ExternalLink size={10} className="group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
                     </a>
-                    <button className="bg-[#EA580C] hover:bg-[#c2410c] text-white text-xs font-semibold px-4 py-2 rounded-lg transition-all shadow-[0_0_15px_rgba(234,88,12,0.3)] hover:shadow-[0_0_20px_rgba(234,88,12,0.5)]">
+                    <button className="bg-accent hover:bg-accent/90 text-black text-xs font-semibold px-4 py-1.5 rounded-lg transition-all shadow-[0_0_15px_rgba(184,255,0,0.3)] hover:shadow-[0_0_20px_rgba(184,255,0,0.5)]">
                         Get Started
                     </button>
                 </div>
@@ -354,7 +355,7 @@ export default function SetuLandingPage() {
             )}
 
             {/* ══════════════════ HERO (Centered) ══════════════════ */}
-            <section className="relative z-10 px-6 md:px-12 lg:px-20 pt-24 md:pt-32 pb-12 md:pb-20">
+            <section className="relative z-10 px-6 md:px-12 lg:px-20 pt-24 md:pt-28 pb-10 md:pb-16">
                 <div
                     className="max-w-4xl mx-auto text-center"
                     style={{
@@ -363,10 +364,10 @@ export default function SetuLandingPage() {
                     }}
                 >
                     {/* Headline */}
-                    <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-white leading-[1.1] tracking-[-0.02em] font-playfair">
+                    <h1 className="font-serif text-3xl sm:text-4xl md:text-[2.75rem] font-medium text-white leading-[1.6] tracking-[-0.02em] font-playfair">
                         Describe any task in
                         <br className="hidden md:block" />
-                        <span className="relative inline-block whitespace-nowrap mt-2 md:mt-0">
+                        <span className="relative inline-block whitespace-nowrap mt-1 md:mt-0">
                             <span className="italic text-accent">plain English</span>
                             {/* Hand-drawn curved underline */}
                             <svg
@@ -397,7 +398,7 @@ export default function SetuLandingPage() {
                     </p>
 
                     {/* Dynamic Task Automation Card - Reference Implementation */}
-                    <div className="mt-8 max-w-3xl mx-auto">
+                    <div className="mt-8 max-w-2xl mx-auto">
                         {/* Gradient Border Wrapper */}
                         <div className="relative rounded-2xl p-px bg-gradient-to-b from-white/[0.12] to-white/[0.04]">
                             <div className="rounded-2xl overflow-hidden bg-[#1d1d1d]">
@@ -551,22 +552,22 @@ export default function SetuLandingPage() {
                             <svg className="absolute inset-0 w-full h-full z-0" xmlns="http://www.w3.org/2000/svg">
                                 <defs>
                                     <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                                        <stop offset="0%" stopColor="#FF6B35" stopOpacity="0.8" />
-                                        <stop offset="100%" stopColor="#FF6B35" stopOpacity="0.2" />
+                                        <stop offset="0%" stopColor="#B8FF00" stopOpacity="0.8" />
+                                        <stop offset="100%" stopColor="#B8FF00" stopOpacity="0.2" />
                                     </linearGradient>
                                 </defs>
 
                                 {/* 1. Meeting Listener to Task Extractor (Horizontal line) */}
                                 {/* Box centers: ML=54px, TE=149px. Right edge ML=54+24=78. Left edge TE=149-24=125. */}
-                                <path d="M 78 134 L 125 134" stroke="#FF6B35" strokeOpacity="0.5" strokeWidth="2" strokeDasharray="5 4" fill="none" />
+                                <path d="M 78 134 L 125 134" stroke="#B8FF00" strokeOpacity="0.5" strokeWidth="2" strokeDasharray="5 4" fill="none" />
 
                                 {/* 2. Task Extractor to Notion Updater (Curved line) */}
                                 {/* Right edge TE=149+24=173. Left edge NU=251-24=227. */}
-                                <path d="M 173 134 C 200 134, 200 64, 227 64" stroke="#FF6B35" strokeOpacity="0.5" strokeWidth="2" strokeDasharray="5 4" fill="none" />
+                                <path d="M 173 134 C 200 134, 200 64, 227 64" stroke="#B8FF00" strokeOpacity="0.5" strokeWidth="2" strokeDasharray="5 4" fill="none" />
 
                                 {/* 3. Task Extractor to Email Drafter (Curved line) */}
                                 {/* Right edge TE=173. Left edge ED=227. */}
-                                <path d="M 173 134 C 200 134, 200 204, 227 204" stroke="#FF6B35" strokeOpacity="0.5" strokeWidth="2" strokeDasharray="5 4" fill="none" />
+                                <path d="M 173 134 C 200 134, 200 204, 227 204" stroke="#B8FF00" strokeOpacity="0.5" strokeWidth="2" strokeDasharray="5 4" fill="none" />
                             </svg>
 
                             {/* Nodes - positioned by center point with transform */}
