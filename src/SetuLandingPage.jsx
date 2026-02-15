@@ -281,7 +281,6 @@ export default function SetuLandingPage() {
             {/* Background Effects */}
             <div className="grain-overlay"></div>
 
-
             {/* Animated Loading Lines */}
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
                 <div className="animated-line" style={{ left: '15%', animationDelay: '0s' }} />
@@ -293,28 +292,38 @@ export default function SetuLandingPage() {
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full opacity-10 blur-[120px] bg-accent/20 pointer-events-none" />
 
             {/* ══════════════════ NAVBAR ══════════════════ */}
-            <nav className="relative z-50 flex items-center justify-between px-6 md:px-12 lg:px-20 py-5">
-                <SetuLogo size="sm" />
+            {/* ══════════════════ NAVBAR ══════════════════ */}
+            <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 lg:px-20 py-2.5 bg-dark-950/80 backdrop-blur-md border-b border-white/[0.05]">
+                <div className="flex items-center gap-3">
+                    <SetuLogo size="sm" />
+                    <span className="hidden sm:inline-block text-[10px] tracking-widest font-semibold text-white/30 uppercase border border-white/10 px-2 py-0.5 rounded-full">Early Access</span>
+                </div>
 
-                {/* Desktop center nav */}
-                <div className="hidden md:flex items-center gap-8">
+                {/* Desktop center nav - Pill Shape */}
+                <div className="hidden md:flex items-center bg-white/[0.03] border border-white/[0.06] rounded-full px-1 py-1 backdrop-blur-md">
                     {['About', 'Product', 'Prices'].map((item) => (
                         <a
                             key={item}
                             href="#"
-                            className="text-sm text-white/60 hover:text-white transition-colors duration-200"
+                            className="px-4 py-1.5 text-xs font-medium text-white/60 hover:text-white hover:bg-white/[0.05] rounded-full transition-all duration-200"
                         >
                             {item}
                         </a>
                     ))}
+                    <div className="w-px h-3 bg-white/10 mx-1"></div>
+                    <a href="#" className="flex items-center gap-2 px-4 py-1.5 text-xs font-medium text-white/60 hover:text-white hover:bg-white/[0.05] rounded-full transition-all duration-200">
+                        <Github size={14} />
+                        Community
+                    </a>
                 </div>
 
                 {/* Desktop right buttons */}
-                <div className="hidden md:flex items-center gap-3">
-                    <button className="border border-white/20 hover:border-accent hover:text-accent text-white/70 text-sm font-medium px-5 py-2 rounded-lg transition-all duration-300">
+                <div className="hidden md:flex items-center gap-6">
+                    <a href="#" className="text-xs font-medium text-white/50 hover:text-white transition-colors flex items-center gap-1 group">
                         How it works
-                    </button>
-                    <button className="neon-button text-sm px-6 py-2 rounded-lg">
+                        <ExternalLink size={10} className="group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+                    </a>
+                    <button className="bg-[#EA580C] hover:bg-[#c2410c] text-white text-xs font-semibold px-4 py-2 rounded-lg transition-all shadow-[0_0_15px_rgba(234,88,12,0.3)] hover:shadow-[0_0_20px_rgba(234,88,12,0.5)]">
                         Get Started
                     </button>
                 </div>
@@ -345,7 +354,7 @@ export default function SetuLandingPage() {
             )}
 
             {/* ══════════════════ HERO (Centered) ══════════════════ */}
-            <section className="relative z-10 px-6 md:px-12 lg:px-20 pt-8 md:pt-10 pb-16 md:pb-24">
+            <section className="relative z-10 px-6 md:px-12 lg:px-20 pt-24 md:pt-32 pb-12 md:pb-20">
                 <div
                     className="max-w-4xl mx-auto text-center"
                     style={{
@@ -354,14 +363,14 @@ export default function SetuLandingPage() {
                     }}
                 >
                     {/* Headline */}
-                    <h1 className="font-serif text-4xl sm:text-5xl md:text-[3.5rem] font-normal text-white leading-[1.1] tracking-[-0.02em] font-playfair">
+                    <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-white leading-[1.1] tracking-[-0.02em] font-playfair">
                         Describe any task in
                         <br className="hidden md:block" />
                         <span className="relative inline-block whitespace-nowrap mt-2 md:mt-0">
                             <span className="italic text-accent">plain English</span>
                             {/* Hand-drawn curved underline */}
                             <svg
-                                className="absolute left-0 w-full h-[8px] md:h-[10px] -bottom-1 md:-bottom-2 text-accent opacity-90"
+                                className="absolute left-0 w-full h-[6px] md:h-[8px] -bottom-1 md:-bottom-2 text-accent opacity-90"
                                 viewBox="0 0 200 12"
                                 fill="none"
                                 preserveAspectRatio="none"
@@ -383,71 +392,82 @@ export default function SetuLandingPage() {
                     </h1>
 
                     {/* Subtitle */}
-                    <p className="mt-4 text-white/45 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
+                    <p className="mt-4 text-white/45 text-sm md:text-base max-w-lg mx-auto leading-relaxed">
                         Setu is a no-code AI agent platform that helps you automate your daily tasks.
                     </p>
 
-                    {/* Dynamic Task Automation Card */}
-                    <div className="mt-16 max-w-3xl mx-auto">
-                        <div className="w-full glass-card p-3">
-                            <div className="glass-card-strong p-4 flex flex-col gap-4">
+                    {/* Dynamic Task Automation Card - Reference Implementation */}
+                    <div className="mt-8 max-w-3xl mx-auto">
+                        {/* Gradient Border Wrapper */}
+                        <div className="relative rounded-2xl p-px bg-gradient-to-b from-white/[0.12] to-white/[0.04]">
+                            <div className="rounded-2xl overflow-hidden bg-[#1d1d1d]">
+                                <div className="px-3 py-3 pb-3 space-y-[4px]">
 
-                                {/* When Input Line */}
-                                <div className="flex items-center gap-3 bg-[#222222] border border-white/10 rounded-lg px-4 py-3 group focus-within:border-white/30 transition-colors">
-                                    <span className="text-white/60 font-medium whitespace-nowrap">When</span>
-                                    <div className="w-full relative h-6 overflow-hidden flex items-center">
-                                        {/* Note: In a production app you'd use framer-motion or CSS transitions. Here we rely on simple state change to mimic the video. */}
-                                        <span key={`trigger-${currentExampleIndex}`} className="text-white/90 w-full truncate animate-[fade-in_0.5s_ease-in-out]">
-                                            {examples[currentExampleIndex].trigger}
-                                        </span>
-                                    </div>
-                                    <PenTool size={16} className="text-white/20 flex-shrink-0 group-hover:text-white/40 cursor-pointer" />
-                                </div>
-
-                                {/* Automatically Input Line */}
-                                <div className="flex items-center gap-3 bg-[#222222] border border-white/10 rounded-lg px-4 py-3 group focus-within:border-white/30 transition-colors">
-                                    <span className="text-accent font-medium whitespace-nowrap">Automatically <span className="text-accent/60 ml-1">→</span></span>
-                                    <div className="w-full relative h-6 overflow-hidden flex items-center">
-                                        <span key={`action-${currentExampleIndex}`} className="text-white/90 w-full truncate animate-[fade-in_0.5s_ease-in-out]">
-                                            {examples[currentExampleIndex].action}
-                                        </span>
-                                    </div>
-                                    <PenTool size={16} className="text-white/20 flex-shrink-0 group-hover:text-white/40 cursor-pointer" />
-                                </div>
-                            </div>
-
-                            {/* Bottom Toolbar */}
-                            <div className="flex flex-wrap items-center justify-between px-2 py-3 mt-1 gap-4">
-                                <div className="flex items-center gap-4">
-                                    {/* Integrations button that opens Modal */}
-                                    <button
-                                        onClick={() => setIsAppsModalOpen(true)}
-                                        className="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full px-3 py-1.5 transition-colors group relative"
-                                    >
-                                        <div className="flex -space-x-1">
-                                            <div className="w-5 h-5 rounded-full bg-white flex items-center justify-center border-2 border-[#141414] z-30"><Github size={12} color="black" /></div>
-                                            <div className="w-5 h-5 rounded-full bg-[#4285F4] flex items-center justify-center border-2 border-[#141414] z-20"><Calendar size={12} color="white" /></div>
-                                            <div className="w-5 h-5 rounded-full bg-[#0F9D58] flex items-center justify-center border-2 border-[#141414] z-10"><HardDrive size={12} color="white" /></div>
+                                    {/* 'When' Input Block */}
+                                    <div className="rounded-xl bg-[#262626] px-4 py-3 border border-white/[0.06] transition-all duration-200 hover:border-white/[0.12] focus-within:border-white/[0.18] focus-within:bg-[#2a2a2a] cursor-text">
+                                        <div className="flex items-start gap-3">
+                                            <span className="text-[#6b7280] text-[14px] font-medium shrink-0 pt-0.5">When</span>
+                                            <div className="flex-1 relative">
+                                                <div className="w-full bg-transparent outline-none text-[14px] z-10 relative min-h-[24px] text-left mt-[1px] text-[#9ca3af] animate-[fade-in_0.5s_ease-in-out]">
+                                                    {examples[currentExampleIndex].trigger}
+                                                </div>
+                                            </div>
+                                            <PenTool size={14} className="text-white/20 shrink-0 mt-1" />
                                         </div>
-                                        <span className="text-sm font-medium text-white/90">Integrations</span>
+                                    </div>
 
-                                        {/* Simple tooltip on hover */}
-                                        <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-white text-black text-xs font-semibold py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
-                                            Browse available apps
-                                        </span>
-                                    </button>
+                                    {/* 'Automatically' Input Block */}
+                                    <div className="rounded-xl bg-[#262626] px-4 py-3 border border-white/[0.06] transition-all duration-200 hover:border-white/[0.12] focus-within:border-white/[0.18] focus-within:bg-[#2a2a2a] cursor-text">
+                                        <div className="flex items-start gap-3">
+                                            <span className="text-accent text-[14px] font-medium shrink-0 pt-0.5 flex items-center gap-1">
+                                                Automatically <span className="text-accent/60">→</span>
+                                            </span>
+                                            <div className="flex-1 relative">
+                                                <div className="w-full bg-transparent outline-none text-[14px] z-10 relative min-h-[24px] text-left mt-[1px] text-[#9ca3af] animate-[fade-in_0.5s_ease-in-out]">
+                                                    {examples[currentExampleIndex].action}
+                                                </div>
+                                            </div>
+                                            <PenTool size={14} className="text-white/20 shrink-0 mt-1" />
+                                        </div>
+                                    </div>
 
-                                    <button className="flex items-center gap-1.5 text-sm text-white/50 hover:text-white/80 transition-colors">
-                                        <Zap size={14} className="text-white/40" />
-                                        When something happens
-                                        <ChevronRight size={14} className="rotate-90" />
-                                    </button>
+                                    {/* Bottom Bar: Integrations & Create */}
+                                    <div className="flex items-center justify-between pt-1.5 px-1">
+                                        <div className="flex items-center gap-1.5">
+                                            {/* Integrations Badge */}
+                                            <button
+                                                onClick={() => setIsAppsModalOpen(true)}
+                                                className="bg-white/[0.04] hover:bg-white/[0.07] text-[#a1a1aa] hover:text-white px-3 h-[38px] rounded-xl transition-all duration-150 flex items-center gap-2 text-[13px]"
+                                            >
+                                                <div className="flex items-center">
+                                                    <div className="w-[18px] h-[18px] bg-white rounded-full flex items-center justify-center shadow-sm z-30">
+                                                        <img src={SLACK_LOGO} alt="Slack" className="w-[10px] h-[10px]" />
+                                                    </div>
+                                                    <div className="w-[18px] h-[18px] bg-white rounded-full flex items-center justify-center shadow-sm -ml-1.5 z-20">
+                                                        <img src={GSHEETS_LOGO} alt="Sheets" className="w-[10px] h-[10px]" />
+                                                    </div>
+                                                    <div className="w-[18px] h-[18px] bg-white rounded-full flex items-center justify-center shadow-sm -ml-1.5 z-10">
+                                                        <img src={NOTION_LOGO} alt="Notion" className="w-[10px] h-[10px]" />
+                                                    </div>
+                                                </div>
+                                                <span className="hidden sm:inline font-medium">Integrations</span>
+                                            </button>
+
+                                            {/* When something happens Badge */}
+                                            <button className="bg-white/[0.04] hover:bg-white/[0.07] text-[#a1a1aa] hover:text-white px-3 h-[38px] rounded-xl transition-all duration-150 flex items-center gap-1.5 text-[13px] font-medium">
+                                                <Zap size={14} className="fill-current" />
+                                                <span className="hidden sm:inline">When something happens</span>
+                                            </button>
+                                        </div>
+
+                                        {/* Create Button */}
+                                        <button className="relative overflow-hidden group/btn text-black h-[38px] px-4 rounded-xl text-[13px] font-semibold flex items-center gap-1.5 transition-all duration-200 active:scale-[0.98] bg-accent hover:bg-[#dfff4d] hover:shadow-lg hover:shadow-accent/20">
+                                            <Sparkles size={14} className="fill-black" />
+                                            <span>Create</span>
+                                        </button>
+                                    </div>
+
                                 </div>
-
-                                <button className="bg-accent hover:bg-accent-light text-white text-sm font-semibold px-6 py-2 rounded-lg transition-all flex items-center gap-2">
-                                    <Sparkles size={16} />
-                                    Create
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -642,21 +662,21 @@ export default function SetuLandingPage() {
                     </p>
                 </div>
 
-                <div className="max-w-3xl mx-auto px-6">
-                    <div className="grid grid-cols-4 sm:grid-cols-6 gap-3 md:gap-4">
+                <div className="max-w-5xl mx-auto px-6">
+                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 md:gap-6">
                         {toolsGrid.map((tool) => (
                             <div
                                 key={tool.name}
-                                className="glass-card hover:bg-white/[0.08] flex flex-col items-center justify-center py-5 px-3 cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/5 group"
+                                className="glass-card hover:bg-white/[0.08] flex flex-col items-center justify-center py-6 px-4 md:py-8 md:px-6 cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:shadow-accent/5 group"
                             >
-                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${tool.bg} mb-2 transition-transform group-hover:scale-110`}>
+                                <div className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center ${tool.bg} mb-3 transition-transform group-hover:scale-110`}>
                                     {tool.image ? (
-                                        <img src={tool.image} alt={tool.name} className="w-5 h-5 object-contain" />
+                                        <img src={tool.image} alt={tool.name} className="w-6 h-6 md:w-7 md:h-7 object-contain" />
                                     ) : (
-                                        <tool.icon size={20} style={{ color: tool.color }} />
+                                        <tool.icon size={24} className="md:w-7 md:h-7" style={{ color: tool.color }} />
                                     )}
                                 </div>
-                                <span className="text-[11px] text-white/50 group-hover:text-white/70 font-medium transition-colors">{tool.name}</span>
+                                <span className="text-xs text-white/50 group-hover:text-white/70 font-medium transition-colors">{tool.name}</span>
                             </div>
                         ))}
                     </div>
@@ -731,7 +751,7 @@ export default function SetuLandingPage() {
                     {/* Bottom bar */}
                     <div className="flex flex-col md:flex-row items-center justify-between mt-12 pt-8 border-t border-white/[0.05] gap-4">
                         <p className="text-xs text-white/25">
-                            © 2025 Incredible, Inc. All rights reserved.
+                            © 2026 Setu, Inc. All rights reserved.
                         </p>
                         <div className="flex items-center gap-6">
                             <a href="#" className="text-xs text-white/30 hover:text-white/50 transition-colors">Privacy Policy</a>
