@@ -8,12 +8,13 @@ export default {
     extend: {
       colors: {
         accent: {
-          DEFAULT: '#FF6B35',
-          light: '#FF8B5E',
-          dark: '#E55A25',
+          DEFAULT: '#CBFF00', // neon-green
+          light: '#DFFF4D',
+          dark: '#A6D900',
+          blue: '#0EA5E9',    // electric-blue
         },
         dark: {
-          900: '#0A0705',
+          900: '#0a0a0a',     // Strict dark bg
           800: '#0D0A06',
           700: '#151008',
           600: '#1A140B',
@@ -24,6 +25,7 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        serif: ['Playfair Display', 'Georgia', 'serif'],
       },
     },
   },

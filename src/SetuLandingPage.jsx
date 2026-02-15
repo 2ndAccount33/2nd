@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Mail, Calendar, FileText, HardDrive, MessageSquare,
     Github, Zap, Check, ChevronRight,
     Globe, Shield, Clock, Sparkles, Bot, Workflow,
     ExternalLink, Star, Menu, X, Search, Code, Database,
-    ShoppingBag, Image, Layers, PenTool, LayoutTemplate, Briefcase
+    ShoppingBag, Image, Layers, PenTool, LayoutTemplate, Briefcase,
+    Volume2, ListTodo, ListChecks
 } from 'lucide-react';
 
 const GMAIL_LOGO = 'https://www.gstatic.com/marketing-cms/assets/images/66/ac/14b165e647fd85c824bfbe5d6bc5/gmail.webp=s96-fcrop64=1,00000000ffffffff-rw';
@@ -124,16 +125,24 @@ const AppCard = ({ app }) => {
     )
 };
 
-const WorkflowNode = ({ label, icon: Icon, x, y, active, accent }) => (
+const WorkflowNode = ({ label, icon: Icon, isImage, x, y, active, accent }) => (
     <div
-        className={`absolute flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-500
-      ${active ? 'bg-accent/20 border border-accent/40 text-accent shadow-lg shadow-accent/10' : 'bg-white/[0.06] border border-white/10 text-white/70'}
-      ${accent ? 'ring-1 ring-accent/30' : ''}
-    `}
-        style={{ left: x, top: y }}
+        className="absolute flex flex-col items-center gap-2 transition-all duration-500 z-10"
+        style={{ left: x, top: y, transform: 'translate(-50%, -50%)' }}
     >
-        <Icon size={14} />
-        {label}
+        <div className={`w-12 h-12 rounded-xl flex items-center justify-center border transition-all duration-300
+            ${active
+                ? 'bg-accent/20 border-accent/40 text-accent shadow-[0_0_15px_rgba(255,107,53,0.25)]'
+                : 'bg-[#1C1C1C] border-white/10 text-white/70 shadow-lg'}
+            ${accent ? 'ring-1 ring-accent/30' : ''}
+        `}>
+            {isImage ? (
+                <img src={Icon} alt={label} className="w-6 h-6 object-contain" />
+            ) : (
+                <Icon size={22} />
+            )}
+        </div>
+        <span className="text-[11px] font-medium text-white/70 whitespace-nowrap">{label}</span>
     </div>
 );
 
@@ -161,16 +170,102 @@ const toolsGrid = [
     { name: 'More', icon: Sparkles, color: '#FF6B35', bg: 'bg-accent/10' },
 ];
 
+const Marquee = ({ items, reverse = false, className = '' }) => (
+    <div className={`marquee-container ${className}`}>
+        <div
+            className="marquee-content"
+            style={{
+                animationDirection: reverse ? 'reverse' : 'normal',
+                animationDuration: '40s'
+            }}
+        >
+            {items.concat(items).concat(items).map((item, i) => (
+                <div key={i} className="marquee-item">
+                    <span className="text-xl mx-2">★</span>
+                    {item}
+                </div>
+            ))}
+        </div>
+    </div>
+);
+
 /* ════════════════════════════════════════════════ */
 /* MAIN COMPONENT                    */
 /* ════════════════════════════════════════════════ */
 export default function SetuLandingPage() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-    // State for the dynamic UI
+    const [scrolled, setScrolled] = useState(false);
     const [isAppsModalOpen, setIsAppsModalOpen] = useState(false);
     const [activeTab, setActiveTab] = useState('Productivity');
     const [currentExampleIndex, setCurrentExampleIndex] = useState(0);
+
+    // Parallax & Cursor State
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+    // Custom Cursor Effect
+    useEffect(() => {
+        const cursor = document.createElement('div');
+        cursor.className = 'custom-cursor';
+        document.body.appendChild(cursor);
+
+        // Track mouse movement
+        const handleMouseMove = (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        };
+
+        // Hover effects
+        const handleMouseEnter = () => cursor.classList.add('hover');
+        const handleMouseLeave = () => cursor.classList.remove('hover');
+
+        // Click effects
+        const handleMouseDown = () => cursor.classList.add('click');
+        const handleMouseUp = () => cursor.classList.remove('click');
+
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mousedown', handleMouseDown);
+        window.addEventListener('mouseup', handleMouseUp);
+
+        // Add listeners to interactive elements
+        const interactiveElements = document.querySelectorAll('a, button, [role="button"], .card, .glass-card, .marquee-item');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', handleMouseEnter);
+            el.addEventListener('mouseleave', handleMouseLeave);
+        });
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mousedown', handleMouseDown);
+            window.removeEventListener('mouseup', handleMouseUp);
+            interactiveElements.forEach(el => {
+                el.removeEventListener('mouseenter', handleMouseEnter);
+                el.removeEventListener('mouseleave', handleMouseLeave);
+            });
+            cursor.remove();
+        };
+    }, []);
+
+    // Parallax Effect
+    useEffect(() => {
+        const handleMouseMove = (e) => {
+            setMousePosition({
+                x: (e.clientX / window.innerWidth - 0.5) * 20,
+                y: (e.clientY / window.innerHeight - 0.5) * 20
+            });
+        };
+
+        window.addEventListener('mousemove', handleMouseMove);
+        return () => window.removeEventListener('mousemove', handleMouseMove);
+    }, []);
+
+    // Handle scroll effect
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 0);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     // Cycle through text examples
     useEffect(() => {
@@ -181,11 +276,25 @@ export default function SetuLandingPage() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-dark-900 text-white font-sans relative overflow-x-hidden">
+        <div className="min-h-screen bg-dark-900 text-white selection:bg-accent selection:text-black overflow-x-hidden font-sans">
 
-            {/* ──────── AMBIENT BACKGROUND ──────── */}
-            <div className="hero-glow fixed inset-0 pointer-events-none z-0" />
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full opacity-20 blur-[120px] bg-accent/20 pointer-events-none" />
+            {/* Background Effects */}
+            <div className="grain-overlay"></div>
+
+            {/* Animated Lines - Multiple Instances */}
+            <div className="animated-line" style={{ left: '15%' }}></div>
+            <div className="animated-line" style={{ left: '45%', animationDelay: '4s' }}></div>
+            <div className="animated-line" style={{ left: '75%', animationDelay: '8s' }}></div>
+
+            {/* Animated Loading Lines */}
+            <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+                <div className="animated-line" style={{ left: '15%', animationDelay: '0s' }} />
+                <div className="animated-line" style={{ left: '50%', animationDelay: '5s' }} />
+                <div className="animated-line" style={{ left: '85%', animationDelay: '2.5s' }} />
+            </div>
+
+            <div className="hero-glow fixed inset-0 pointer-events-none z-0 opacity-40" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full opacity-10 blur-[120px] bg-accent/20 pointer-events-none" />
 
             {/* ══════════════════ NAVBAR ══════════════════ */}
             <nav className="relative z-50 flex items-center justify-between px-6 md:px-12 lg:px-20 py-5">
@@ -206,10 +315,10 @@ export default function SetuLandingPage() {
 
                 {/* Desktop right buttons */}
                 <div className="hidden md:flex items-center gap-3">
-                    <button className="border border-white/20 hover:border-white/40 text-white/70 hover:text-white text-sm font-medium px-5 py-2 rounded-lg transition-all duration-200">
+                    <button className="border border-white/20 hover:border-accent hover:text-accent text-white/70 text-sm font-medium px-5 py-2 rounded-lg transition-all duration-300">
                         How it works
                     </button>
-                    <button className="bg-accent hover:bg-accent-light text-white text-sm font-semibold px-5 py-2 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-accent/25">
+                    <button className="neon-button text-sm px-6 py-2 rounded-lg">
                         Get Started
                     </button>
                 </div>
@@ -241,16 +350,22 @@ export default function SetuLandingPage() {
 
             {/* ══════════════════ HERO (Centered) ══════════════════ */}
             <section className="relative z-10 px-6 md:px-12 lg:px-20 pt-8 md:pt-10 pb-16 md:pb-24">
-                <div className="max-w-4xl mx-auto text-center">
+                <div
+                    className="max-w-4xl mx-auto text-center"
+                    style={{
+                        transform: `translate(${mousePosition.x}px, ${mousePosition.y}px)`,
+                        transition: 'transform 0.3s ease-out'
+                    }}
+                >
                     {/* Headline */}
-                    <h1 className="font-serif text-3xl sm:text-4xl md:text-[2.75rem] font-bold text-white leading-[1.2] md:leading-[1.15] tracking-[-0.02em]">
+                    <h1 className="font-serif text-4xl sm:text-5xl md:text-[3.5rem] font-normal text-white leading-[1.1] tracking-[-0.02em] font-playfair">
                         Describe any task in
                         <br className="hidden md:block" />
-                        <span className="relative inline-block whitespace-nowrap mt-1 md:mt-0">
-                            <span className="italic text-[#C9A96E]">plain English</span>
+                        <span className="relative inline-block whitespace-nowrap mt-2 md:mt-0">
+                            <span className="italic text-accent">plain English</span>
                             {/* Hand-drawn curved underline */}
                             <svg
-                                className="absolute left-0 w-full h-[8px] md:h-[10px] -bottom-1 md:-bottom-1.5 text-[#C9A96E] opacity-90"
+                                className="absolute left-0 w-full h-[8px] md:h-[10px] -bottom-1 md:-bottom-2 text-accent opacity-90"
                                 viewBox="0 0 200 12"
                                 fill="none"
                                 preserveAspectRatio="none"
@@ -266,7 +381,7 @@ export default function SetuLandingPage() {
                         </span>
                         .
                         <br className="hidden md:block" />
-                        Our AI agents bridge Gmail, Calendar,
+                        Our AI agents bridge Gmail,Calendar,
                         <br className="hidden md:block" />
                         and Notion, etc — automatically.
                     </h1>
@@ -277,9 +392,9 @@ export default function SetuLandingPage() {
                     </p>
 
                     {/* Dynamic Task Automation Card */}
-                    <div className="mt-8 max-w-3xl mx-auto">
-                        <div className="w-full bg-[#141414] border border-white/10 rounded-2xl shadow-2xl overflow-hidden text-left p-3">
-                            <div className="bg-[#1A1A1A] rounded-xl border border-white/5 p-4 flex flex-col gap-4">
+                    <div className="mt-16 max-w-3xl mx-auto">
+                        <div className="w-full glass-card p-3">
+                            <div className="glass-card-strong p-4 flex flex-col gap-4">
 
                                 {/* When Input Line */}
                                 <div className="flex items-center gap-3 bg-[#222222] border border-white/10 rounded-lg px-4 py-3 group focus-within:border-white/30 transition-colors">
@@ -339,34 +454,46 @@ export default function SetuLandingPage() {
                                 </button>
                             </div>
                         </div>
-
-                        {/* Helpful links below card */}
-                        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm text-white/50">
-                            Not sure where to start?
-                            <button className="flex items-center gap-1 text-white hover:text-white/80 underline decoration-white/30 underline-offset-4">
-                                <LayoutTemplate size={14} /> Browse templates
-                            </button>
-                            or
-                            <button className="flex items-center gap-1 text-white hover:text-white/80 underline decoration-white/30 underline-offset-4">
-                                <Search size={14} /> help me find a use-case
-                            </button>
-                        </div>
                     </div>
                 </div>
+
+                {/* Hero CTA Buttons */}
+                <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button className="neon-button text-base px-8 py-4 rounded-lg w-full sm:w-auto min-w-[200px] group flex items-center justify-center gap-2">
+                        Start Automating Free
+                        <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    </button>
+                    <button className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/30 text-white font-medium px-8 py-4 rounded-lg transition-all w-full sm:w-auto min-w-[200px]">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white/80">
+                            <path d="M8 5V19L19 12L8 5Z" fill="currentColor" />
+                        </svg>
+                        Watch Demo
+                    </button>
+                </div>
+
+                {/* Marquee Strip 1: Neon Green */}
+                <div className="mt-24 -mx-6 md:-mx-12 lg:-mx-20 transform -rotate-1 origin-left border-y-2 border-black">
+                    <Marquee
+                        items={['✓ AI AGENTS', '★ AUTOMATION', '✓ NO-CODE', '★ INTEGRATIONS', '✓ WORKFLOWS', '★ PRODUCTIVITY']}
+                        className="bg-[#CBFF00] text-black py-4"
+                    />
+                </div>
             </section>
+
+            {/* Marquee Strip 2: Dark */}
+            <div className="relative z-20 py-0 bg-[#0a0a0a] border-y border-white/10">
+                <Marquee
+                    items={['★ GMAIL', '★ NOTION', '★ SLACK', '★ LINEAR', '★ DISCORD', '★ GITHUB', '★ HUBSPOT']}
+                    reverse
+                    className="bg-[#1a1a1a] text-white py-4"
+                />
+            </div>
 
             {/* ══════════════════ NOT SURE SECTION ══════════════════ */}
             <div className="max-w-6xl mx-auto px-6 pt-16 md:pt-28">
                 <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
             </div>
             <section className="relative z-10 text-center px-6 py-16 md:py-24">
-                <p className="text-xs tracking-[0.2em] uppercase text-white/30 mb-3">Not sure where to start?</p>
-                <h2 className="text-2xl md:text-3xl font-bold text-white">
-                    Not sure where to start?...
-                </h2>
-                <p className="text-white/50 mt-3 text-sm md:text-base max-w-md mx-auto">
-                    Learn more AI agents that work in real use cases.
-                </p>
             </section>
 
             {/* ══════════════════ FEATURE PANELS ══════════════════ */}
@@ -405,22 +532,59 @@ export default function SetuLandingPage() {
                         {/* Workflow visualization */}
                         <div className="relative h-[280px]">
                             {/* Connection lines */}
-                            <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                            <svg className="absolute inset-0 w-full h-full z-0" xmlns="http://www.w3.org/2000/svg">
                                 <defs>
                                     <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                                        <stop offset="0%" stopColor="#FF6B35" stopOpacity="0.6" />
-                                        <stop offset="100%" stopColor="#FF6B35" stopOpacity="0.15" />
+                                        <stop offset="0%" stopColor="#FF6B35" stopOpacity="0.8" />
+                                        <stop offset="100%" stopColor="#FF6B35" stopOpacity="0.2" />
                                     </linearGradient>
                                 </defs>
-                                <line x1="85" y1="45" x2="120" y2="105" stroke="url(#lineGrad)" strokeWidth="1.5" strokeDasharray="4 3" />
-                                <line x1="170" y1="130" x2="100" y2="190" stroke="url(#lineGrad)" strokeWidth="1.5" strokeDasharray="4 3" />
-                                <line x1="130" y1="215" x2="180" y2="255" stroke="url(#lineGrad)" strokeWidth="1.5" strokeDasharray="4 3" />
+
+                                {/* 1. Meeting Listener to Task Extractor (Horizontal line) */}
+                                {/* Box centers: ML=54px, TE=149px. Right edge ML=54+24=78. Left edge TE=149-24=125. */}
+                                <path d="M 78 134 L 125 134" stroke="#FF6B35" strokeOpacity="0.5" strokeWidth="2" strokeDasharray="5 4" fill="none" />
+
+                                {/* 2. Task Extractor to Notion Updater (Curved line) */}
+                                {/* Right edge TE=149+24=173. Left edge NU=251-24=227. */}
+                                <path d="M 173 134 C 200 134, 200 64, 227 64" stroke="#FF6B35" strokeOpacity="0.5" strokeWidth="2" strokeDasharray="5 4" fill="none" />
+
+                                {/* 3. Task Extractor to Email Drafter (Curved line) */}
+                                {/* Right edge TE=173. Left edge ED=227. */}
+                                <path d="M 173 134 C 200 134, 200 204, 227 204" stroke="#FF6B35" strokeOpacity="0.5" strokeWidth="2" strokeDasharray="5 4" fill="none" />
                             </svg>
 
-                            <WorkflowNode label="Trigger" icon={Zap} x="30px" y="20px" active />
-                            <WorkflowNode label="Monitor" icon={Clock} x="100px" y="90px" accent />
-                            <WorkflowNode label="Task" icon={Workflow} x="50px" y="170px" />
-                            <WorkflowNode label="Notification" icon={Mail} x="140px" y="240px" active />
+                            {/* Nodes - positioned by center point with transform */}
+                            {/* Node 1: Meeting Listener (center x=54) */}
+                            <div className="absolute flex flex-col items-center gap-2 z-10" style={{ left: '54px', top: '110px', transform: 'translateX(-50%)' }}>
+                                <div className="w-12 h-12 rounded-xl flex items-center justify-center border transition-all duration-500 bg-white/[0.04] border-white/15 text-white/70">
+                                    <Volume2 size={20} />
+                                </div>
+                                <span className="text-[10px] font-medium text-white/70 whitespace-nowrap">Meeting Listener</span>
+                            </div>
+
+                            {/* Node 2: Task Extractor (center x=149) */}
+                            <div className="absolute flex flex-col items-center gap-2 z-10" style={{ left: '149px', top: '110px', transform: 'translateX(-50%)' }}>
+                                <div className="w-12 h-12 rounded-xl flex items-center justify-center border transition-all duration-500 bg-white/[0.03] border-white/10 text-white/70">
+                                    <ListChecks size={20} />
+                                </div>
+                                <span className="text-[10px] font-medium text-white/70 whitespace-nowrap">Task Extractor</span>
+                            </div>
+
+                            {/* Node 3: Notion Updater (center x=251) */}
+                            <div className="absolute flex flex-col items-center gap-2 z-10" style={{ left: '251px', top: '40px', transform: 'translateX(-50%)' }}>
+                                <div className="w-12 h-12 rounded-xl flex items-center justify-center border transition-all duration-500 bg-[#1A1A1A] border-white/10 text-white/70 overflow-hidden">
+                                    <img src={NOTION_LOGO} alt="Notion" className="w-6 h-6 object-contain opacity-90" />
+                                </div>
+                                <span className="text-[10px] font-medium text-white/70 whitespace-nowrap">Notion Updater</span>
+                            </div>
+
+                            {/* Node 4: Email Drafter (center x=251) */}
+                            <div className="absolute flex flex-col items-center gap-2 z-10" style={{ left: '251px', top: '180px', transform: 'translateX(-50%)' }}>
+                                <div className="w-12 h-12 rounded-xl flex items-center justify-center border transition-all duration-500 bg-[#1A1A1A] border-white/10 text-white/70 overflow-hidden">
+                                    <img src={GMAIL_LOGO} alt="Gmail" className="w-6 h-6 object-contain" />
+                                </div>
+                                <span className="text-[10px] font-medium text-white/70 whitespace-nowrap">Email Drafter</span>
+                            </div>
                         </div>
                     </div>
 
@@ -503,6 +667,14 @@ export default function SetuLandingPage() {
                 </div>
             </section>
 
+            {/* Marquee Strip 3: Gold/Yellow */}
+            <div className="py-0 transform rotate-1 border-y-2 border-black relative z-20 mt-20 mb-10">
+                <Marquee
+                    items={['✓ SECURITY FIRST', '★ SOC2 COMPLIANT', '✓ ENTERPRISE READY', '★ 24/7 SUPPORT', '✓ CUSTOM MODELS']}
+                    className="bg-[#FCD34D] text-black py-4"
+                />
+            </div>
+
             {/* ══════════════════ FOOTER ══════════════════ */}
             <footer className="relative z-10 border-t border-white/[0.06] bg-dark-800/50">
                 <div className="max-w-6xl mx-auto px-6 py-12 md:py-16">
@@ -510,9 +682,8 @@ export default function SetuLandingPage() {
 
                         {/* Brand column */}
                         <div className="col-span-2 md:col-span-1">
-                            <div className="flex items-center gap-2 mb-4">
-                                <Star size={20} className="text-accent" fill="#FF6B35" />
-                                <span className="text-lg font-bold">Incredible</span>
+                            <div className="mb-4">
+                                <SetuLogo size="sm" />
                             </div>
                             <p className="text-xs text-white/30 leading-relaxed max-w-[200px]">
                                 Build AI-agent lead users. Automate 5000+ custom use cases. All with AI.
