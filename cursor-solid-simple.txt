@@ -1,0 +1,79 @@
+UPDATED CURSOR - Solid Circle (Copy-Paste This)
+
+Replace the previous cursor code with this:
+
+═══════════════════════════════════════════════════════════════════
+
+CSS (index.css):
+```css
+* { cursor: none; }
+
+.custom-cursor {
+  position: fixed;
+  width: 16px;
+  height: 16px;
+  background: rgba(203, 255, 0, 1);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
+  transform: translate(-50%, -50%);
+  box-shadow: 
+    0 0 20px rgba(203, 255, 0, 0.8),
+    0 0 40px rgba(203, 255, 0, 0.4);
+  transition: width 0.2s ease, height 0.2s ease;
+}
+
+.custom-cursor.hover {
+  width: 24px;
+  height: 24px;
+}
+
+.custom-cursor.click {
+  width: 12px;
+  height: 12px;
+}
+```
+
+JSX (SetuLandingPage.jsx):
+```jsx
+useEffect(() => {
+  const cursor = document.createElement('div');
+  cursor.className = 'custom-cursor';
+  document.body.appendChild(cursor);
+  
+  const move = (e) => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  };
+  
+  const grow = () => cursor.classList.add('hover');
+  const shrink = () => cursor.classList.remove('hover');
+  const clickStart = () => cursor.classList.add('click');
+  const clickEnd = () => cursor.classList.remove('click');
+  
+  window.addEventListener('mousemove', move);
+  window.addEventListener('mousedown', clickStart);
+  window.addEventListener('mouseup', clickEnd);
+  
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', grow);
+    el.addEventListener('mouseleave', shrink);
+  });
+  
+  return () => {
+    window.removeEventListener('mousemove', move);
+    window.removeEventListener('mousedown', clickStart);
+    window.removeEventListener('mouseup', clickEnd);
+    cursor.remove();
+  };
+}, []);
+```
+
+═══════════════════════════════════════════════════════════════════
+
+RESULT:
+- Default: 16px solid green circle with glow
+- Hover: Grows to 24px
+- Click: Shrinks to 12px
+
+This matches your second image (solid filled circle)!

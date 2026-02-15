@@ -1,0 +1,65 @@
+Fix my website to match Creative Propeller's aesthetic from https://www.creativepropeller.com/. Here are the CRITICAL issues:
+
+**1. ADD GRID BACKGROUND**
+The background needs visible grid lines. Add this:
+```css
+background-image: 
+  linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+background-size: 60px 60px;
+```
+
+**2. MAKE ANIMATED LINES VISIBLE**
+The blue glowing lines are too subtle. They need STRONG glow:
+```css
+.animated-line {
+  width: 3px;
+  background: linear-gradient(to bottom, transparent, rgba(14, 165, 233, 0.8), transparent);
+  filter: blur(3px);
+  box-shadow: 0 0 30px rgba(14, 165, 233, 0.8), 0 0 60px rgba(14, 165, 233, 0.5);
+  animation: moveLine 12s ease-in-out infinite;
+}
+```
+Add 3-4 lines at different horizontal positions with different animation delays.
+
+**3. FIX MARQUEE STRIP COLORS**
+Change from orange/red to these exact colors:
+- Strip 1: `background: #CBFF00;` (NEON GREEN) - black text
+- Strip 2: `background: #1a1a1a;` (DARK) - white text
+- Strip 3: `background: #FCD34D;` (YELLOW/GOLD) - black text
+
+**4. ADD GRAIN TEXTURE**
+Add subtle film grain overlay for atmosphere:
+```css
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+```
+
+**5. IMPROVE HEADLINE**
+Use an elegant serif font:
+```css
+font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+font-weight: 400;
+letter-spacing: -0.02em;
+```
+
+**6. ADD GLASSMORPHISM TO CARDS**
+```css
+background: rgba(26, 26, 26, 0.4);
+backdrop-filter: blur(20px);
+border: 1px solid rgba(255, 255, 255, 0.08);
+box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+```
+
+**PRIORITY ORDER:**
+1. Grid background (makes it look professional instantly)
+2. Bright glowing animated lines (key visual feature)
+3. Correct marquee colors (green, dark, yellow)
+
+The animated blue lines MUST be very visible with strong glow - they're not meant to be subtle!

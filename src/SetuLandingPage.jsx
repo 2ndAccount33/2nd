@@ -281,16 +281,12 @@ export default function SetuLandingPage() {
             {/* Background Effects */}
             <div className="grain-overlay"></div>
 
-            {/* Animated Lines - Multiple Instances */}
-            <div className="animated-line" style={{ left: '15%' }}></div>
-            <div className="animated-line" style={{ left: '45%', animationDelay: '4s' }}></div>
-            <div className="animated-line" style={{ left: '75%', animationDelay: '8s' }}></div>
 
             {/* Animated Loading Lines */}
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
                 <div className="animated-line" style={{ left: '15%', animationDelay: '0s' }} />
-                <div className="animated-line" style={{ left: '50%', animationDelay: '5s' }} />
-                <div className="animated-line" style={{ left: '85%', animationDelay: '2.5s' }} />
+                <div className="animated-line" style={{ left: '45%', animationDelay: '4s' }} />
+                <div className="animated-line" style={{ left: '75%', animationDelay: '8s' }} />
             </div>
 
             <div className="hero-glow fixed inset-0 pointer-events-none z-0 opacity-40" />
