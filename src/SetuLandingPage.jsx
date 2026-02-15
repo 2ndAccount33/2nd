@@ -198,6 +198,7 @@ export default function SetuLandingPage() {
     const [isAppsModalOpen, setIsAppsModalOpen] = useState(false);
     const [activeTab, setActiveTab] = useState('Productivity');
     const [currentExampleIndex, setCurrentExampleIndex] = useState(0);
+    const [isTransitioning, setIsTransitioning] = useState(false);
 
     // Parallax & Cursor State
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -267,11 +268,15 @@ export default function SetuLandingPage() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Cycle through text examples
+    // Cycle through text examples with smooth transitions
     useEffect(() => {
         const interval = setInterval(() => {
-            setCurrentExampleIndex((prev) => (prev + 1) % examples.length);
-        }, 4000); // changes every 4 seconds
+            setIsTransitioning(true);
+            setTimeout(() => {
+                setCurrentExampleIndex((prev) => (prev + 1) % examples.length);
+                setIsTransitioning(false);
+            }, 400);
+        }, 4000);
         return () => clearInterval(interval);
     }, []);
 
@@ -364,11 +369,11 @@ export default function SetuLandingPage() {
                     }}
                 >
                     {/* Headline */}
-                    <h1 className="font-serif text-3xl sm:text-4xl md:text-[2.75rem] font-medium text-white leading-[1.6] tracking-[-0.02em] font-playfair">
-                        Describe any task in
-                        <br className="hidden md:block" />
-                        <span className="relative inline-block whitespace-nowrap mt-1 md:mt-0">
-                            <span className="italic text-accent">plain English</span>
+                    <h1 className="font-serif text-3xl sm:text-4xl md:text-[2.75rem] font-medium text-white tracking-[-0.02em] font-playfair flex flex-col items-center gap-2 md:gap-3">
+                        <span>Describe any task in</span>
+
+                        <span className="relative inline-block whitespace-nowrap">
+                            <span className="italic text-accent">plain English</span>.
                             {/* Hand-drawn curved underline */}
                             <svg
                                 className="absolute left-0 w-full h-[6px] md:h-[8px] -bottom-1 md:-bottom-2 text-accent opacity-90"
@@ -385,11 +390,9 @@ export default function SetuLandingPage() {
                                 />
                             </svg>
                         </span>
-                        .
-                        <br className="hidden md:block" />
-                        Our AI agents bridge Gmail,Calendar,
-                        <br className="hidden md:block" />
-                        and Notion, etc — automatically.
+
+                        <span>Our AI agents bridge Gmail,Calendar,</span>
+                        <span>and Notion, etc — automatically.</span>
                     </h1>
 
                     {/* Subtitle */}
@@ -409,7 +412,7 @@ export default function SetuLandingPage() {
                                         <div className="flex items-start gap-3">
                                             <span className="text-[#6b7280] text-[14px] font-medium shrink-0 pt-0.5">When</span>
                                             <div className="flex-1 relative">
-                                                <div className="w-full bg-transparent outline-none text-[14px] z-10 relative min-h-[24px] text-left mt-[1px] text-[#9ca3af] animate-[fade-in_0.5s_ease-in-out]">
+                                                <div className={`w-full bg-transparent outline-none text-[14px] z-10 relative min-h-[24px] text-left mt-[1px] text-[#9ca3af] ${isTransitioning ? 'animate-fade-out-up' : 'animate-fade-in-up'}`}>
                                                     {examples[currentExampleIndex].trigger}
                                                 </div>
                                             </div>
@@ -424,7 +427,7 @@ export default function SetuLandingPage() {
                                                 Automatically <span className="text-accent/60">→</span>
                                             </span>
                                             <div className="flex-1 relative">
-                                                <div className="w-full bg-transparent outline-none text-[14px] z-10 relative min-h-[24px] text-left mt-[1px] text-[#9ca3af] animate-[fade-in_0.5s_ease-in-out]">
+                                                <div className={`w-full bg-transparent outline-none text-[14px] z-10 relative min-h-[24px] text-left mt-[1px] text-[#9ca3af] ${isTransitioning ? 'animate-fade-out-up' : 'animate-fade-in-up'}`}>
                                                     {examples[currentExampleIndex].action}
                                                 </div>
                                             </div>
